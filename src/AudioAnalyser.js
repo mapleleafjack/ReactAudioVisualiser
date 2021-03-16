@@ -1,17 +1,25 @@
 import React, {Component} from 'react';
 import AudioVisualiser from "./AudioVisualiser";
+import Audio3DVisualiser from "./Audio3DVisualiser";
 
 class AudioAnalyser extends Component {
 
   constructor(props){
     super(props);
-    this.state = {audioData: new Uint8Array(0)};
+    this.state = {
+      audioData: new Uint8Array(0),
+      visualiser_type: true
+    };
     this.tick = this.tick.bind(this);
+
+    this.buttonClick= this.buttonClick.bind(this);
   }
 
   componentDidMount(){
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.analyser = this.audioContext.createAnalyser();
+    // this.analyser.fftSize = 2048;
+    // this.analyser.fftSize = 128;
     this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
     this.source = this.audioContext.createMediaStreamSource(this.props.audio);
     this.source.connect(this.analyser);
@@ -34,8 +42,18 @@ class AudioAnalyser extends Component {
     this.rafId = requestAnimationFrame(this.tick);
   }
 
+  buttonClick(event){
+    this.setState({visualiser_type: !this.state.visualiser_type});
+  }
+
   render(){
-    return <AudioVisualiser audioData={this.state.audioData} />;
+    return <div style={{height:"96vh"}}>
+            <button onClick={this.buttonClick} className="uk-button uk-button-default"> Switch </button>
+        <br/>
+
+
+      {this.state.visualiser_type ? <AudioVisualiser audioData={this.state.audioData} /> : <Audio3DVisualiser audioData={this.state.audioData} />}
+    </div>;
   }
 }
 

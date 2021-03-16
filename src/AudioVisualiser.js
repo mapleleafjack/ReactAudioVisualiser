@@ -6,14 +6,15 @@ class AudioVisualiser extends Component {
     this.canvas = React.createRef();
   }
   render(){
-    return <canvas width="300" height="300" ref={this.canvas}/>
+    return <canvas width="1000px" ref={this.canvas}/>
   }
 
   draw(){
     const { audioData } = this.props;
     const canvas = this.canvas.current;
-   const height = canvas.height;
-   const width = canvas.width;
+    const height = canvas.height;
+    const width = canvas.width;
+
     const context = canvas.getContext("2d");
     let x = 0;
     const sliceWith = (width * 1.0) / audioData.length;

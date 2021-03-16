@@ -38,7 +38,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="controls">
-          <button onClick={this.toggleMicrophone}>
+          <button className="uk-button uk-button-default" onClick={this.toggleMicrophone}>
           {this.state.audio ? "Stop microphone" : "Get microphone input"}
           </button>
         </div>
