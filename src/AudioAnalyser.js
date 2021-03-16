@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import AudioVisualiser from "./AudioVisualiser";
 import Audio3DVisualiser from "./Audio3DVisualiser";
+import AudioChart from "./AudioChart";
 
 class AudioAnalyser extends Component {
 
@@ -8,11 +9,11 @@ class AudioAnalyser extends Component {
     super(props);
     this.state = {
       audioData: new Uint8Array(0),
-      visualiser_type: true
+      visualiser_type: "rt_line"
     };
     this.tick = this.tick.bind(this);
 
-    this.buttonClick= this.buttonClick.bind(this);
+    this.visualisationChange= this.visualisationChange.bind(this);
   }
 
   componentDidMount(){
@@ -55,17 +56,28 @@ class AudioAnalyser extends Component {
     this.rafId = requestAnimationFrame(this.tick);
   }
 
-  buttonClick(event){
-    this.setState({visualiser_type: !this.state.visualiser_type});
+  visualisationChange(event){
+    this.setState({visualiser_type: event.target.value});
   }
 
   render(){
-    return <div style={{height:"96vh"}}>
-            <button onClick={this.buttonClick} className="uk-button uk-button-default"> Switch </button>
-        <br/>
+    return <div onChange={this.visualisationChange} style={{height:"96vh"}}>
+            <select className="uk-select uk-width-1-3" name="visType" id="visType">
+              <option value="rt_line">Line (Realtime)</option>
+              <option value="rt_3d">3D (Realtime)</option>
+              <option value="graph_2d">Graph (Analyse)</option>
+            </select>
+          <br/>
+      {
 
+        (this.state.visualiser_type === "rt_line") && <AudioVisualiser audioData={this.state.audioData} />
+        ||
+        (this.state.visualiser_type === "rt_3d") && <Audio3DVisualiser audioData={this.state.audioData} />
+        ||
+        // (this.state.visualiser_type === "graph_2d") && <AudioChart audioData={this.state.audioData} />
+        (this.state.visualiser_type === "graph_2d") && <div> work in progress</div>
 
-      {this.state.visualiser_type ? <AudioVisualiser audioData={this.state.audioData} /> : <Audio3DVisualiser audioData={this.state.audioData} />}
+    }
     </div>;
   }
 }
