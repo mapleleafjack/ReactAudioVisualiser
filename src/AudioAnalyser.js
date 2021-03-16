@@ -17,12 +17,22 @@ class AudioAnalyser extends Component {
 
   componentDidMount(){
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+
+    //gain node
+    // this.gainNode = audioContext.createGain();
+
+
+    //analyser node
     this.analyser = this.audioContext.createAnalyser();
     // this.analyser.fftSize = 2048;
     // this.analyser.fftSize = 128;
     this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
     this.source = this.audioContext.createMediaStreamSource(this.props.audio);
     this.source.connect(this.analyser);
+
+
+    // this.gainNode.connect(this.audioContext.destination);
 
     //start animation
     this.rafId = requestAnimationFrame(this.tick)
@@ -37,6 +47,9 @@ class AudioAnalyser extends Component {
   tick(){
     this.analyser.getByteTimeDomainData(this.dataArray);
     this.setState({audioData: this.dataArray});
+
+    // this.gainNode.gain.setValueAtTime(2, this.audioContext.currentTime);
+
 
     //one more time!
     this.rafId = requestAnimationFrame(this.tick);

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Canvas } from 'react-three-fiber'
+import { OrbitControls, Stars } from 'drei'
 
 class Audio3DVisualiser extends Component {
     constructor(props){
@@ -16,7 +17,6 @@ class Audio3DVisualiser extends Component {
       let hi = (audioData[1000] / 128.0);
 
 
-
       // let low_array = audioData.slice(0, 300);
       // let medium_array = audioData.slice(300, 700);
       // let high_array = audioData.slice(700, 1024);
@@ -30,18 +30,22 @@ class Audio3DVisualiser extends Component {
       // let hi = high_array.reduce((a, b) => a + b, 0);
       // let hi_avg = ((hi / high_array.length) || 0) / 128;
 
-      return <Canvas>
+      return <Canvas style={{background:"black"}}>
+          <OrbitControls />
+          <Stars />
+          <ambientLight intensity={0.5} />
+          <spotLight position={[10, 15, 10]} angle={0.3} />
           <mesh position={[-2,0,0]} scale={[1, low, 1]}>
             <boxBufferGeometry attach="geometry" />
-            <meshBasicMaterial attach="material" color="red" opacity={0.5} transparent />
+            <meshBasicMaterial attach="material" color="red" opacity={1} transparent />
           </mesh>
           <mesh position={[0,0,0]} scale={[1, med, 1]}>
             <boxBufferGeometry attach="geometry" />
-            <meshBasicMaterial attach="material" color="orange" opacity={0.5} transparent />
+            <meshBasicMaterial attach="material" color="orange" opacity={1} transparent />
           </mesh>
           <mesh position={[2,0,0]} scale={[1, hi, 1]}>
             <boxBufferGeometry attach="geometry" />
-            <meshBasicMaterial attach="material" color="blue" opacity={0.5} transparent />
+            <meshBasicMaterial attach="material" color="blue" opacity={1} transparent />
           </mesh>
       </Canvas>
     }
